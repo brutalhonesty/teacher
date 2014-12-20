@@ -23,7 +23,7 @@ describe('Api', function() {
       var api = new Api;
 
       api.url().should.eql({
-        'en': 'http://service.afterthedeadline.com',
+        'en': 'http://localhost:1049',
         'fr': 'http://fr.service.afterthedeadline.com',
         'de': 'http://de.service.afterthedeadline.com',
         'pt': 'http://pt.service.afterthedeadline.com',
@@ -48,7 +48,7 @@ describe('Api', function() {
       api.mock('request').and.replace(function(options, cb) {
         options.should.eql({
           method: 'POST',
-          url: 'http://service.afterthedeadline.com/checkDocument',
+          url: 'http://localhost:1049/checkDocument',
           form: {data: data, key: key}
         });
         api.request.reset()
