@@ -48,7 +48,7 @@ describe('Teacher', function() {
         done();
       });
 
-      teacher.check('foo');
+      teacher.check({text: 'foo'});
     });
 
     it('should return errors if any', function(done) {
@@ -58,7 +58,9 @@ describe('Teacher', function() {
         fn(new Error('test'));
       });
 
-      teacher.check('foo', function(err) {
+      teacher.check({
+        text: 'foo'
+      }, function(err) {
         err.should.be.ok;
         done();
       });
@@ -68,7 +70,7 @@ describe('Teacher', function() {
       var teacher = new Teacher;
 
       teacher.api.mock('get').and.replace(function(text, action, lang, fn) {
-        var ret = { error: 
+        var ret = { error:
           [ { string: 'Worng',
             description: 'Spelling',
             precontext: {},
@@ -78,18 +80,44 @@ describe('Teacher', function() {
               description: 'Spelling',
               precontext: 'Worng',
               suggestions: {},
-              type: 'bias language' } ] };
+              type: 'bias language' }] };
               fn(null, ret);
       });
 
-      teacher.check('Worng owrd', function(err, data) {
-        data.should.eql([{ 
+      teacher.check({
+        text: 'Worng owrd readme'
+      }, function(err, data) {
+        data.should.eql([{
           string: 'Worng',
           description: 'Spelling',
           precontext: {},
           suggestions: {},
           type: 'spelling'
         }]);
+        done();
+      });
+    });
+
+    it('should filter based on custom words', function (done) {
+      var teacher = new Teacher;
+      teacher.api.mock('get').and.replace(function (text, action, lang, fn) {
+        var ret = {
+          error: [{
+            string: 'readme',
+            description: 'Spelling',
+            precontext: '',
+            suggestions: {},
+            type: 'spelling'
+          }]
+        };
+        fn(null, ret);
+      });
+
+      teacher.check({
+        text: 'readme',
+        custom: ['readme']
+      }, function(err, data) {
+        data.should.eql([]);
         done();
       });
     });

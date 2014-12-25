@@ -27,12 +27,27 @@ var teacher = require('teacher');
 /**
  * Simple.
  */
-teacher.check('Thsi si wrogn', function(err, data) {
+teacher.check({
+  text: 'Thsi si wrogn'
+}, function(err, data) {
 	console.log(data);
 });
 
-teacher.check('This is right', function(err, data) {
+teacher.check({
+  text: 'This is right'
+}, function(err, data) {
 	console.log(data);
+});
+
+/**
+ * Add custom dictionary filter.
+ */
+
+teacher.check({
+  text: 'This is right',
+  custom: ['my', 'custom', 'words']
+}, function(err, data) {
+  console.log(data);
 });
 
 /**
@@ -40,7 +55,9 @@ teacher.check('This is right', function(err, data) {
  */
 var teach = new teacher.Teacher('fr', ['ignored type']);
 
-teach.check('No idea.', function(err, data) {
+teach.check({
+  text: 'No idea.'
+}, function(err, data) {
 	console.log(data);
 });
 ```
